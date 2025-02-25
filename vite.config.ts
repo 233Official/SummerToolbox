@@ -5,14 +5,16 @@ import react from "@vitejs/plugin-react";
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig({
   plugins: [react()],
-
-  // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-  //
-  // 1. prevent vite from obscuring rust errors
+  
+  // 防止 Vite 无法解析 Tauri API
+  optimizeDeps: {
+    include: ['@tauri-apps/api', '@tauri-apps/plugin-opener']
+  },
+  // prevent vite from obscuring rust errors
   clearScreen: false,
-  // 2. tauri expects a fixed port, fail if that port is not available
+  // Tauri expects a fixed port, fail if that port is not available
   server: {
     port: 1420,
     strictPort: true,
@@ -29,4 +31,6 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
-}));
+  // to access the Tauri environment variables set by the CLI with information about the current target
+  envPrefix: ['VITE_', 'TAURI_']
+});

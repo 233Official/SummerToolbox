@@ -3,7 +3,7 @@
 }
 
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -34,7 +34,7 @@
   height: 6em;
   padding: 1.5em;
   will-change: filter;
-  transition: 0.75s;
+  transition: filter 300ms;
 }
 
 .logo.tauri:hover {
@@ -46,6 +46,10 @@
   justify-content: center;
 }
 
+.row > button {
+  margin-left: 8px;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -53,7 +57,7 @@ a {
 }
 
 a:hover {
-  color: #535bf2;
+  color: #24c8db;
 }
 
 h1 {
@@ -93,6 +97,31 @@ button {
 
 #greet-input {
   margin-right: 5px;
+}
+
+.main-link {
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.active-link button {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  font-weight: 500;
+}
+
+.active-link span {
+  font-weight: 500;
+}
+
+.encoder-decoder-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.encoder-tab {
+  margin-bottom: 20px;
 }
 
 @media (prefers-color-scheme: dark) {

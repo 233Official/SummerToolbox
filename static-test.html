@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tauri Test Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f2f5;
+      }
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+      }
+      p {
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Tauri 测试页面</h1>
+      <p>如果您能看到这个页面，说明 Tauri 能够正确加载静态 HTML 内容。</p>
+    </div>
+
+    <script>
+      console.log("Static page loaded");
+      document.querySelector('h1').addEventListener('click', () => {
+        document.querySelector('h1').textContent = "点击成功！";
+      });
+    </script>
+  </body>
+</html>
