@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
 import {
   Box,
@@ -11,7 +10,9 @@ import {
 // 导入基本页面组件
 import SimplePage from "./pages/SimplePage";
 import HomePage from "./pages/HomePage";
-import EncoderDecoder from "./pages/EncoderDecoder"; // 添加这一行
+import EncoderDecoder from "./pages/EncoderDecoder";
+import JsonFormatter from "./pages/JsonFormatter";
+import History from "./pages/History";
 
 // 侧边栏链接组件 - 简化版
 interface MainLinkProps {
@@ -35,13 +36,14 @@ function MainLink({ label, path, onClick }: MainLinkProps) {
       }}
     >
       <Box
-        sx={{
+        style={{
           padding: "14px 16px",
           borderRadius: "4px",
           color: "#333",
           transition: "all 0.2s ease",
-          borderBottom: "1px solid #eaeaea", // 添加底部边框增强视觉区分
-          marginBottom: "4px", // 增加下边距
+          borderBottom: "1px solid #eaeaea",
+          marginBottom: "4px",
+          // 将之前 sx 中的样式移到这里
           "&:hover": {
             backgroundColor: "#f5f5f5",
           },
@@ -54,8 +56,6 @@ function MainLink({ label, path, onClick }: MainLinkProps) {
 }
 
 function App() {
-  const [opened, setOpened] = useState(false);
-  
   console.log("App with sidebar rendering");
 
   return (
@@ -77,7 +77,7 @@ function App() {
         {/* Sidebar */}
         <Box
           w={250}
-          p="md" // 增加内边距
+          p="md"
           style={{
             borderRight: "1px solid #ddd",
             display: "flex",
@@ -96,7 +96,7 @@ function App() {
             }} 
             mt="xs"
           >
-            {/* 简化为单一列表，没有分类 */}
+            {/* 简化为单一列表 */}
             <MainLink label="主页" path="/" onClick={() => {}} />
             <MainLink label="编解码工具" path="/encoder" onClick={() => {}} />
             <MainLink label="JSON 格式化" path="/json" onClick={() => {}} />
@@ -108,7 +108,7 @@ function App() {
             p="xs"
             style={{
               borderTop: "1px solid #ddd",
-              marginTop: "auto", // 推到底部
+              marginTop: "auto",
             }}
           >
             <Text size="xs" c="dimmed" ta="center">
@@ -121,9 +121,9 @@ function App() {
         <Box p="md" style={{ flex: 1, overflow: "auto" }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/encoder" element={<EncoderDecoder />} /> {/* 更新这一行 */}
-            <Route path="/json" element={<SimplePage title="JSON 格式化" />} />
-            <Route path="/history" element={<SimplePage title="历史记录" />} />
+            <Route path="/encoder" element={<EncoderDecoder />} />
+            <Route path="/json" element={<JsonFormatter />} />
+            <Route path="/history" element={<History />} />
             <Route path="*" element={<SimplePage title="页面未找到" />} />
           </Routes>
         </Box>

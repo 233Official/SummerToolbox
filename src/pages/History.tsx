@@ -75,7 +75,7 @@ const History = () => {
 
   return (
     <div className="history-container">
-      <Group position="apart" mb="md">
+      <Group justify="apart" mb="md">
         <Title order={2}>历史记录</Title>
         <Button 
           color="red" 
@@ -92,7 +92,7 @@ const History = () => {
         {loading ? (
           <Text>加载中...</Text>
         ) : historyItems.length === 0 ? (
-          <Text color="dimmed" align="center" py="xl">
+          <Text c="dimmed" ta="center" py="xl">
             <IconHistory size={24} />
             <div>暂无历史记录</div>
           </Text>
@@ -129,7 +129,7 @@ const History = () => {
                   </Table.Td>
                   <Table.Td>{formatTimestamp(item.timestamp)}</Table.Td>
                   <Table.Td>
-                    <Group spacing={5}>
+                    <Group gap="xs">
                       <ActionIcon onClick={() => handleViewDetails(item)} color="blue">
                         <IconEye size={16} />
                       </ActionIcon>
@@ -204,7 +204,7 @@ const History = () => {
         size="sm"
       >
         <Text mb="md">确定要清除所有历史记录吗？此操作无法撤销。</Text>
-        <Group position="right">
+        <Group justify="flex-end">
           <Button variant="default" onClick={() => setConfirmClearOpen(false)}>
             取消
           </Button>

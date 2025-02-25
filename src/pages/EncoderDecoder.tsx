@@ -13,11 +13,9 @@ import {
   CopyButton,
   ActionIcon,
   Tooltip,
-  Flex,
 } from "@mantine/core";
 import { 
-  IconArrowDown, 
-  IconArrowUp, 
+  IconArrowDown,
   IconFileUpload, 
   IconLink, 
   IconCode, 
@@ -540,7 +538,13 @@ function EncoderDecoder() {
       
       {/* 错误消息显示 */}
       {errorMsg && (
-        <Paper withBorder p="sm" mt="md" radius="md" sx={{ backgroundColor: '#FFF4F4' }}>
+        <Paper 
+          withBorder 
+          p="sm" 
+          mt="md" 
+          radius="md" 
+          style={{ backgroundColor: '#FFF4F4' }}
+        >
           <Text color="red" size="sm">{errorMsg}</Text>
         </Paper>
       )}

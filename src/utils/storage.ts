@@ -52,6 +52,3 @@ export async function deleteHistoryItem(id: string): Promise<void> {
   const updatedHistory = history.filter(item => item.id !== id);
   localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedHistory));
 }
-
-// 注释: 这是一个使用 localStorage 的临时实现
-// 当 Tauri 的存储插件配置正确后，可以切换回 Tauri 存储 API

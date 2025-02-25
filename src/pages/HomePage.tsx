@@ -9,7 +9,7 @@ function HomePage() {
   async function greet() {
     try {
       const message = await invoke('greet', { name });
-      setGreeting(message);
+      setGreeting(message as string); // 添加类型断言
     } catch (error) {
       console.error('Error invoking greet:', error);
       setGreeting('Error: Failed to call Rust function');
