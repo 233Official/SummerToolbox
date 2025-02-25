@@ -11,6 +11,7 @@ import {
 // 导入基本页面组件
 import SimplePage from "./pages/SimplePage";
 import HomePage from "./pages/HomePage";
+import EncoderDecoder from "./pages/EncoderDecoder"; // 添加这一行
 
 // 侧边栏链接组件 - 简化版
 interface MainLinkProps {
@@ -120,7 +121,7 @@ function App() {
         <Box p="md" style={{ flex: 1, overflow: "auto" }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/encoder" element={<SimplePage title="编解码工具" />} />
+            <Route path="/encoder" element={<EncoderDecoder />} /> {/* 更新这一行 */}
             <Route path="/json" element={<SimplePage title="JSON 格式化" />} />
             <Route path="/history" element={<SimplePage title="历史记录" />} />
             <Route path="*" element={<SimplePage title="页面未找到" />} />

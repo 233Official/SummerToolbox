@@ -1,6 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use urlencoding::{encode, decode};
 use base64::{Engine as _, engine::general_purpose};
+use std::collections::HashMap;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -79,6 +80,100 @@ fn decode_base64(text: &str) -> Result<String, String> {
     String::from_utf8(bytes).map_err(|e| e.to_string())
 }
 
+// 添加HTML编解码功能
+#[tauri::command]
+fn encode_html(text: &str) -> Result<String, String> {
+    let mut result = String::with_capacity(text.len() * 2);
+    
+    for c in text.chars() {
+        match c {
+            '&' => result.push_str("&amp;"),
+            '<' => result.push_str("&lt;"),
+            '>' => result.push_str("&gt;"),
+            '"' => result.push_str("&quot;"),
+            '\'' => result.push_str("&#39;"),
+            ' ' => result.push_str("&nbsp;"),
+            _ => result.push(c)
+        }
+    }
+    
+    Ok(result)
+}
+
+#[tauri::command]
+fn decode_html(text: &str) -> Result<String, String> {
+    let mut result = String::new();
+    let mut i = 0;
+    let chars: Vec<char> = text.chars().collect();
+    
+    while i < chars.len() {
+        if chars[i] == '&' {
+            // 可能是HTML实体
+            let mut entity_end = i + 1;
+            while entity_end < chars.len() && chars[entity_end] != ';' {
+                entity_end += 1;
+            }
+            
+            if entity_end < chars.len() && chars[entity_end] == ';' {
+                // 找到了一个可能的HTML实体
+                let entity: String = chars[i+1..entity_end].iter().collect();
+                
+                match entity.as_str() {
+                    "amp" => result.push('&'),
+                    "lt" => result.push('<'),
+                    "gt" => result.push('>'),
+                    "quot" => result.push('"'),
+                    "apos" => result.push('\''),
+                    "nbsp" => result.push(' '),
+                    _ if entity.starts_with("#") => {
+                        // 数字实体
+                        let code = if entity.starts_with("#x") || entity.starts_with("#X") {
+                            // 十六进制
+                            u32::from_str_radix(&entity[2..], 16).ok()
+                        } else if entity.starts_with("#") {
+                            // 十进制
+                            entity[1..].parse::<u32>().ok()
+                        } else {
+                            None
+                        };
+                        
+                        if let Some(code) = code {
+                            if let Some(c) = std::char::from_u32(code) {
+                                result.push(c);
+                            } else {
+                                // 无效的Unicode码点，保留原样
+                                result.push('&');
+                                result.push_str(&entity);
+                                result.push(';');
+                            }
+                        } else {
+                            // 解析失败，保留原样
+                            result.push('&');
+                            result.push_str(&entity);
+                            result.push(';');
+                        }
+                    },
+                    _ => {
+                        // 未知实体，保留原样
+                        result.push('&');
+                        result.push_str(&entity);
+                        result.push(';');
+                    }
+                }
+                
+                i = entity_end + 1;
+                continue;
+            }
+        }
+        
+        // 不是HTML实体，或者格式不正确
+        result.push(chars[i]);
+        i += 1;
+    }
+    
+    Ok(result)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -92,7 +187,9 @@ pub fn run() {
             encode_unicode,
             decode_unicode,
             encode_base64,
-            decode_base64
+            decode_base64,
+            encode_html,
+            decode_html
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
