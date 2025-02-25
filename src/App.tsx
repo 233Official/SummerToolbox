@@ -6,31 +6,20 @@ import {
   Text,
   Title,
   Group,
-  Container,
-  UnstyledButton,
-  ThemeIcon,
 } from "@mantine/core";
-import {
-  IconHome,
-  IconCode,
-  IconBraces,
-  IconHistory,
-} from "@tabler/icons-react";
 
 // 导入基本页面组件
 import SimplePage from "./pages/SimplePage";
 import HomePage from "./pages/HomePage";
 
-// 侧边栏链接组件
+// 侧边栏链接组件 - 简化版
 interface MainLinkProps {
-  icon: React.ReactNode;
-  color: string;
   label: string;
   path: string;
   onClick: () => void;
 }
 
-function MainLink({ icon, color, label, path, onClick }: MainLinkProps) {
+function MainLink({ label, path, onClick }: MainLinkProps) {
   return (
     <NavLink
       to={path}
@@ -41,28 +30,24 @@ function MainLink({ icon, color, label, path, onClick }: MainLinkProps) {
       style={{ 
         textDecoration: "none",
         display: "block",
-        width: "100%",  // 确保 NavLink 占满宽度
+        width: "100%",
       }}
     >
-      <UnstyledButton
+      <Box
         sx={{
-          display: "block",
-          width: "100%",  // 已经设置了100%宽度
-          padding: "10px",
+          padding: "14px 16px",
           borderRadius: "4px",
-          color: "#000",
+          color: "#333",
+          transition: "all 0.2s ease",
+          borderBottom: "1px solid #eaeaea", // 添加底部边框增强视觉区分
+          marginBottom: "4px", // 增加下边距
           "&:hover": {
-            backgroundColor: "#f0f0f0",
+            backgroundColor: "#f5f5f5",
           },
         }}
       >
-        <Group>
-          <ThemeIcon color={color} variant="light">
-            {icon}
-          </ThemeIcon>
-          <Text size="sm">{label}</Text>
-        </Group>
-      </UnstyledButton>
+        <Text size="md">{label}</Text>
+      </Box>
     </NavLink>
   );
 }
@@ -71,38 +56,6 @@ function App() {
   const [opened, setOpened] = useState(false);
   
   console.log("App with sidebar rendering");
-
-  // 导航数据
-  const navigationLinks = [
-    {
-      icon: <IconHome size={16} />,
-      color: "blue",
-      label: "主页",
-      path: "/",
-    },
-    {
-      icon: <IconCode size={16} />,
-      color: "teal",
-      label: "编解码工具",
-      path: "/encoder",
-    },
-    {
-      icon: <IconBraces size={16} />,
-      color: "violet",
-      label: "JSON 格式化",
-      path: "/json",
-    },
-    {
-      icon: <IconHistory size={16} />,
-      color: "orange",
-      label: "历史记录",
-      path: "/history",
-    },
-  ];
-
-  const links = navigationLinks.map((link) => (
-    <MainLink {...link} key={link.label} onClick={() => {}} />
-  ));
 
   return (
     <Flex h="100vh" direction="column">
@@ -123,30 +76,38 @@ function App() {
         {/* Sidebar */}
         <Box
           w={250}
-          p="xs"
+          p="md" // 增加内边距
           style={{
             borderRight: "1px solid #ddd",
             display: "flex",
             flexDirection: "column",
             height: "100%",
-            width: "250px", // 明确设置宽度
+            width: "250px",
           }}
         >
+          {/* 导航链接区域 */}
           <Box 
             style={{ 
               flex: 1,
               display: "flex",
               flexDirection: "column",
-              width: "100%" // 确保子容器占满宽度
+              width: "100%"
             }} 
             mt="xs"
           >
-            {links}
+            {/* 简化为单一列表，没有分类 */}
+            <MainLink label="主页" path="/" onClick={() => {}} />
+            <MainLink label="编解码工具" path="/encoder" onClick={() => {}} />
+            <MainLink label="JSON 格式化" path="/json" onClick={() => {}} />
+            <MainLink label="历史记录" path="/history" onClick={() => {}} />
           </Box>
+          
+          {/* 底部版本信息 */}
           <Box
             p="xs"
             style={{
               borderTop: "1px solid #ddd",
+              marginTop: "auto", // 推到底部
             }}
           >
             <Text size="xs" c="dimmed" ta="center">

@@ -102,8 +102,12 @@ button {
 .main-link {
   text-decoration: none;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   width: 100%; /* 确保链接占满宽度 */
+}
+
+.main-link:hover {
+  text-decoration: none;
 }
 
 .main-link button, 
@@ -111,10 +115,22 @@ button {
   width: 100%; /* 确保按钮和内部div填满宽度 */
 }
 
+.main-link div {
+  font-weight: 400;
+}
+
 .active-link button {
   background-color: rgba(0, 0, 0, 0.05) !important;
   font-weight: 500;
   width: 100%; /* 确保选中状态按钮也填满宽度 */
+}
+
+.active-link div {
+  background-color: #f0f5ff; /* 浅蓝色背景 */
+  border-left: 3px solid #228be6; /* 左侧蓝色边框 */
+  color: #228be6; /* 文字变为蓝色 */
+  font-weight: 500;
+  padding-left: 13px !important; /* 补偿左边框的宽度 */
 }
 
 .active-link span {
