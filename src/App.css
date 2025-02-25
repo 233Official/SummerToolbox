@@ -103,11 +103,18 @@ button {
   text-decoration: none;
   display: block;
   margin-bottom: 8px;
+  width: 100%; /* 确保链接占满宽度 */
+}
+
+.main-link button, 
+.main-link div {
+  width: 100%; /* 确保按钮和内部div填满宽度 */
 }
 
 .active-link button {
   background-color: rgba(0, 0, 0, 0.05) !important;
   font-weight: 500;
+  width: 100%; /* 确保选中状态按钮也填满宽度 */
 }
 
 .active-link span {

@@ -38,12 +38,16 @@ function MainLink({ icon, color, label, path, onClick }: MainLinkProps) {
         isActive ? "main-link active-link" : "main-link"
       }
       onClick={onClick}
-      style={{ textDecoration: "none" }}
+      style={{ 
+        textDecoration: "none",
+        display: "block",
+        width: "100%",  // 确保 NavLink 占满宽度
+      }}
     >
       <UnstyledButton
         sx={{
           display: "block",
-          width: "100%",
+          width: "100%",  // 已经设置了100%宽度
           padding: "10px",
           borderRadius: "4px",
           color: "#000",
@@ -125,9 +129,18 @@ function App() {
             display: "flex",
             flexDirection: "column",
             height: "100%",
+            width: "250px", // 明确设置宽度
           }}
         >
-          <Box style={{ flex: 1 }} mt="xs">
+          <Box 
+            style={{ 
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              width: "100%" // 确保子容器占满宽度
+            }} 
+            mt="xs"
+          >
             {links}
           </Box>
           <Box
