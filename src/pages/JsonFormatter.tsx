@@ -11,12 +11,10 @@ import {
   Tooltip,
   CopyButton,
   Text,
-  Flex,
   Alert,
 } from '@mantine/core';
 import { 
   IconArrowsMinimize, 
-  IconArrowsMaximize, 
   IconBraces, 
   IconCheck, 
   IconCopy, 
