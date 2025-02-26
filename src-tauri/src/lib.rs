@@ -1,6 +1,9 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use urlencoding::{encode, decode};
 use base64::{Engine as _, engine::general_purpose};
+use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_fs::FsExt;
+use tauri_plugin_shell::ShellExt;
 // use std::collections::HashMap;
 
 // 导入图像转换模块
@@ -188,7 +191,6 @@ pub fn run() {
     tauri::Builder::default()
         // 移除 store 插件的引用
         // .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             greet,
             encode_url,
@@ -201,6 +203,11 @@ pub fn run() {
             decode_html,
             convert_image  // 添加新命令
         ])
+        // 添加插件
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_opener::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
