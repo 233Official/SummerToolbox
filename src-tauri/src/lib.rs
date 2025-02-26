@@ -1,7 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use urlencoding::{encode, decode};
 use base64::{Engine as _, engine::general_purpose};
-use std::collections::HashMap;
+// use std::collections::HashMap;
 
 // 导入图像转换模块
 mod image_converter;

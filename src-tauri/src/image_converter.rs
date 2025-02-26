@@ -1,5 +1,5 @@
-use image::{ImageBuffer, Rgba, RgbaImage, GenericImageView};
-use imageproc::drawing;
+// use image::{ImageBuffer, Rgba, RgbaImage, GenericImageView};
+// use imageproc::drawing;
 use std::io::Cursor;
 
 // 移除这里的 #[tauri::command] 宏
