@@ -13,6 +13,7 @@ import HomePage from "./pages/HomePage";
 import EncoderDecoder from "./pages/EncoderDecoder";
 import JsonFormatter from "./pages/JsonFormatter";
 import History from "./pages/History";
+import ImageConverter from "./pages/ImageConverter"; // 添加新页面
 
 // 侧边栏链接组件 - 简化版
 interface MainLinkProps {
@@ -100,6 +101,7 @@ function App() {
             <MainLink label="主页" path="/" onClick={() => {}} />
             <MainLink label="编解码工具" path="/encoder" onClick={() => {}} />
             <MainLink label="JSON 格式化" path="/json" onClick={() => {}} />
+            <MainLink label="图像转换" path="/image" onClick={() => {}} /> {/* 添加新菜单项 */}
             <MainLink label="历史记录" path="/history" onClick={() => {}} />
           </Box>
           
@@ -123,6 +125,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/encoder" element={<EncoderDecoder />} />
             <Route path="/json" element={<JsonFormatter />} />
+            <Route path="/image" element={<ImageConverter />} /> {/* 添加新路由 */}
             <Route path="/history" element={<History />} />
             <Route path="*" element={<SimplePage title="页面未找到" />} />
           </Routes>

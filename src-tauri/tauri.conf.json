@@ -37,6 +37,12 @@
     ]
   },
   "plugins": {
-    "opener": null
+    "opener": null,
+    "dialog": {},
+    "fs": {
+      "scope": {
+        "allow": ["**"]
+      }
+    }
   }
 }

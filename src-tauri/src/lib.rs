@@ -3,6 +3,9 @@ use urlencoding::{encode, decode};
 use base64::{Engine as _, engine::general_purpose};
 use std::collections::HashMap;
 
+// 导入图像转换模块
+mod image_converter;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -174,6 +177,12 @@ fn decode_html(text: &str) -> Result<String, String> {
     Ok(result)
 }
 
+#[tauri::command]
+fn convert_image(image_data: Vec<u8>, format: String, width: u32, height: u32) -> Result<Vec<u8>, String> {
+    // 无需&，直接传递所有权，与image_converter.rs中的函数签名匹配
+    image_converter::convert_image(image_data, format, width, height)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -189,7 +198,8 @@ pub fn run() {
             encode_base64,
             decode_base64,
             encode_html,
-            decode_html
+            decode_html,
+            convert_image  // 添加新命令
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

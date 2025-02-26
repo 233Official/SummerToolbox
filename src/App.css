@@ -3,7 +3,7 @@
 }
 
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #61dafb);
 }
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -34,7 +34,7 @@
   height: 6em;
   padding: 1.5em;
   will-change: filter;
-  transition: filter 300ms;
+  transition: 0.75s;
 }
 
 .logo.tauri:hover {
@@ -46,10 +46,6 @@
   justify-content: center;
 }
 
-.row > button {
-  margin-left: 8px;
-}
-
 a {
   font-weight: 500;
   color: #646cff;
@@ -57,7 +53,7 @@ a {
 }
 
 a:hover {
-  color: #24c8db;
+  color: #535bf2;
 }
 
 h1 {
@@ -97,59 +93,6 @@ button {
 
 #greet-input {
   margin-right: 5px;
-}
-
-.main-link {
-  text-decoration: none;
-  display: block;
-  margin-bottom: 10px;
-  width: 100%; /* 确保链接占满宽度 */
-}
-
-.main-link:hover {
-  text-decoration: none;
-}
-
-/* 为 Box 组件添加悬停效果 */
-.main-link:hover .mantine-Box-root {
-  background-color: #f5f5f5;
-}
-
-.main-link button, 
-.main-link div {
-  width: 100%; /* 确保按钮和内部div填满宽度 */
-}
-
-.main-link div {
-  font-weight: 400;
-}
-
-.active-link button {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-  font-weight: 500;
-  width: 100%; /* 确保选中状态按钮也填满宽度 */
-}
-
-.active-link div {
-  background-color: #f0f5ff; /* 浅蓝色背景 */
-  border-left: 3px solid #228be6; /* 左侧蓝色边框 */
-  color: #228be6; /* 文字变为蓝色 */
-  font-weight: 500;
-  padding-left: 13px !important; /* 补偿左边框的宽度 */
-}
-
-.active-link span {
-  font-weight: 500;
-}
-
-.encoder-decoder-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.encoder-tab {
-  margin-bottom: 20px;
 }
 
 @media (prefers-color-scheme: dark) {
