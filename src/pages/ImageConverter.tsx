@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -15,15 +15,18 @@ import {
   Paper,
   ActionIcon,
 } from "@mantine/core";
-import { open as dialogOpen, save, message, ask } from "@tauri-apps/plugin-dialog";
-import { openPath } from "@tauri-apps/plugin-opener";
+// 修正 invoke 导入路径
 import { invoke } from "@tauri-apps/api/core";
-import { writeFile } from "@tauri-apps/plugin-fs";
+import { open, save, message, ask } from "@tauri-apps/plugin-dialog";
+import { writeFile, readFile } from "@tauri-apps/plugin-fs";
+import { openPath } from "@tauri-apps/plugin-opener";
 import { IconFolder, IconDownload, IconTrash } from "@tabler/icons-react";
 
 export default function ImageConverter() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [convertedImageData, setConvertedImageData] = useState<string | null>(null);
+  const [convertedImageData, setConvertedImageData] = useState<string | null>(
+    null
+  );
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [format, setFormat] = useState("png");
@@ -34,8 +37,7 @@ export default function ImageConverter() {
   // 处理文件选择
   const handleFileSelection = async () => {
     try {
-      // 使用dialogOpen而不是dialog.open
-      const selected = await dialogOpen({
+      const selected = await open({
         multiple: false,
         filters: [
           {
@@ -44,23 +46,27 @@ export default function ImageConverter() {
           },
         ],
       });
-      
+
       if (!selected) return;
-      
+
       const filePath = Array.isArray(selected) ? selected[0] : selected;
-      
-      // 通过fetch获取文件内容（如果是本地文件）
-      const response = await fetch(`file://${filePath}`);
-      const blob = await response.blob();
-      
-      const fileName = filePath.split("/").pop() || filePath.split("\\").pop() || "image";
-      
-      // 创建File对象
-      const file = new File([blob], fileName, { type: blob.type });
-      
+      const fileName =
+        filePath.split("/").pop() || filePath.split("\\").pop() || "image";
+
+      // 使用Tauri v2的文件系统API读取文件
+      const fileBytes = await readFile(filePath);
+
+      // 根据文件扩展名确定MIME类型
+      const extension = fileName.split(".").pop()?.toLowerCase() || "";
+      const mimeType = getMimeType(extension);
+
+      // 创建Blob和File对象
+      const blob = new Blob([fileBytes], { type: mimeType });
+      const file = new File([blob], fileName, { type: mimeType });
+
       setSelectedFile(file);
       setConvertedImageData(null);
-      
+
       // 创建预览
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -69,6 +75,29 @@ export default function ImageConverter() {
       reader.readAsDataURL(file);
     } catch (error) {
       console.error("选择文件出错:", error);
+      console.log("错误类型:", typeof error);
+      console.log("详细错误:", error);
+    }
+  };
+
+  // 添加一个辅助函数来获取MIME类型
+  const getMimeType = (extension: string): string => {
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+        return "image/jpeg";
+      case "png":
+        return "image/png";
+      case "gif":
+        return "image/gif";
+      case "svg":
+        return "image/svg+xml";
+      case "bmp":
+        return "image/bmp";
+      case "ico":
+        return "image/x-icon";
+      default:
+        return "application/octet-stream";
     }
   };
 
@@ -90,7 +119,7 @@ export default function ImageConverter() {
     try {
       const fileData = await selectedFile.arrayBuffer();
       const fileBytes = new Uint8Array(fileData);
-      
+
       // 调用后端转换API
       const result = await invoke<number[]>("convert_image", {
         imageData: Array.from(fileBytes),
@@ -103,7 +132,7 @@ export default function ImageConverter() {
       const resultBytes = new Uint8Array(result);
       let blob: Blob;
       let mimeType: string;
-      
+
       switch (format) {
         case "svg":
           mimeType = "image/svg+xml";
@@ -139,11 +168,11 @@ export default function ImageConverter() {
   // 保存转换后的图像
   const saveImage = async () => {
     if (!convertedImageData || !selectedFile) return;
-    
+
     try {
       const originalFileName = selectedFile.name.split(".")[0] || "image";
-      
-      // 使用save而不是dialog.save
+
+      // 使用正确的函数名
       const savePath = await save({
         defaultPath: `${originalFileName}.${format}`,
         filters: [
@@ -153,33 +182,30 @@ export default function ImageConverter() {
           },
         ],
       });
-      
+
       if (!savePath) return;
-      
+
       // 从预览URL获取数据
       const response = await fetch(convertedImageData);
       const blob = await response.blob();
       const arrayBuffer = await blob.arrayBuffer();
       const uint8Array = new Uint8Array(arrayBuffer);
-      
+
       // 将文件写入磁盘
       await writeFile(savePath, uint8Array);
-      
+
       // 询问是否要打开文件
-      // 使用ask而不是dialog.ask
       const shouldOpen = await ask("文件已保存。要打开它吗？", {
         title: "保存成功",
       });
-      
+
       if (shouldOpen) {
-        // 使用正确的 openPath 函数
         await openPath(savePath);
       }
     } catch (error: any) {
       console.error("保存文件出错:", error);
-      // 仅使用 message 函数，不带 type 参数
       await message("保存文件失败。请检查权限并重试。", {
-        title: "保存错误"
+        title: "保存错误",
       });
     }
   };
@@ -189,12 +215,14 @@ export default function ImageConverter() {
     { value: "png", label: "PNG" },
     { value: "jpg", label: "JPEG/JPG" },
     { value: "ico", label: "ICO" },
-    { value: "svg", label: "SVG" }
+    { value: "svg", label: "SVG" },
   ];
 
   return (
     <Box p="md">
-      <Title order={3} mb={8}>图像格式转换器</Title>
+      <Title order={3} mb={8}>
+        图像格式转换器
+      </Title>
       <Text c="dimmed" mb={16}>
         转换图像格式和调整尺寸
       </Text>
@@ -222,7 +250,7 @@ export default function ImageConverter() {
               <Text size="sm" c="dimmed" mt={8} ta="center">
                 {selectedFile ? selectedFile.name : "点击选择图片"}
               </Text>
-              
+
               {selectedFile && (
                 <ActionIcon
                   style={{ position: "absolute", top: 10, right: 10 }}
@@ -235,7 +263,7 @@ export default function ImageConverter() {
                   <IconTrash size={18} />
                 </ActionIcon>
               )}
-              
+
               {previewImage && (
                 <Image
                   src={previewImage}
