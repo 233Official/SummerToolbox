@@ -15,7 +15,7 @@ import {
   Divider,
   ActionIcon,
   Tooltip,
-  CopyButton,
+  // CopyButton,
   Badge,
   Alert,
   Progress,
@@ -26,12 +26,12 @@ import {
   IconDownload,
   IconArrowRight,
   IconRefresh,
-  IconCheck,
+  // IconCheck,
   IconX,
-  IconPhoto,
+  // IconPhoto,
   IconAspectRatio,
 } from '@tabler/icons-react';
-import { invoke } from '@tauri-apps/api/core';
+import { invoke} from '@tauri-apps/api/core';
 import { save } from '@tauri-apps/plugin-dialog';
 import { writeFile } from '@tauri-apps/plugin-fs';
 
@@ -186,6 +186,15 @@ const ImageConverter = () => {
         const width = sizeOption === 'predefined' ? parseInt(selectedSize) : customWidth;
         const height = sizeOption === 'predefined' ? parseInt(selectedSize) : customHeight;
         
+        console.log("开始调用 convert_image 函数");
+        console.log("参数:", {
+          imageData: Array.from(uint8Array).length + " bytes",
+          format: outputFormat,
+          width,
+          height
+        });
+        console.log("invoke 函数类型:", typeof invoke);
+
         try {
           // 调用Rust函数进行转换
           const result: Uint8Array = await invoke('convert_image', {
@@ -194,6 +203,7 @@ const ImageConverter = () => {
             width,
             height,
           });
+          console.log("调用成功，结果类型:", typeof result);
           
           setOutputData(result);
           
@@ -210,8 +220,11 @@ const ImageConverter = () => {
           const url = URL.createObjectURL(blob);
           setOutputImage(url);
         } catch (error) {
-          console.error('转换失败:', error);
-          setError(`转换失败: ${error}`);
+          console.error('转换失败\n详细错误信息:', error);
+          if (error instanceof Error) {
+            console.error("错误堆栈:", error.stack);
+          }
+          setError(`转换失败: ${error instanceof Error ? error.message : String(error)}`);
         } finally {
           setLoading(false);
         }
