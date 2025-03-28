@@ -76,7 +76,7 @@ const History = () => {
   return (
     <div className="history-container">
       <Group justify="apart" mb="md">
-        <Title order={2}>历史记录</Title>
+        <Title order={2}>历史记录(开发中...)</Title>
         <Button 
           color="red" 
           variant="outline" 
